@@ -9,7 +9,7 @@ Please submit your answers to this lab on Gradescope in the assignment marked â€
 Once you have logged in to Edlab, you can clone the Xv6 repo using
 
 ```bash
-git clone https://github.com/mit-pdos/xv6-public.git
+git clone https://github.com/jbettencourt10/gdb_xv6.git
 ```
 
 Then you can use `cd` to open the directory you just cloned:
