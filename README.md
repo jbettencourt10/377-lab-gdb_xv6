@@ -24,7 +24,7 @@ Finally, you can use `cd` to open the directory you just cloned:
 cd 377-lab-gdb_xv6
 ```
 
-Both folders include Makefiles that allow you to locally compile the lab executable and Xv6 OS and run all the sample code listed in this tutorial. You can compile them by running `make`. Feel free to modify the source files yourself, after making changes you can run `make` again to build new binaries from your modified files. You can also use `make clean` to remove all the built files, this command is usually used when something went wrong during the compilation so that you can start fresh.
+Both folders include Makefiles that allow you to locally compile the lab binary and Xv6 OS and run all the sample code listed in this tutorial. You can compile them by running `make`. Feel free to modify the source files yourself, after making changes you can run `make` again to build new binaries from your modified files. You can also use `make clean` to remove all the built files, this command is usually used when something went wrong during the compilation so that you can start fresh.
 
 ## Part 1: Xv6 (5 Points)
 
@@ -96,17 +96,34 @@ trap.c
     exit();
 ```
 
-From the above files, and the files listed on gradescope, you should be able to answer the questions. Additionally, there exists a wide range of documentation about Xv6 on the internet, so feel free to look for that if you find it necessary.
+From the above files, and the files listed on gradescope, we believe that looking through the source code should be a sufficient amount of information to answer the questions on Gradescope. However, there exists a wide range of documentation about Xv6 on the internet, so feel free to look for that if you find it necessary.
 
 ## Part 2: GDB (5 Points)
 
-We have gone over basic GDB before in lab, but today will be focused around utilizing GDB with threading to debug programs that use multiple threads. To run gdb on a process that uses multiple threads, simply open it with gdb like any other executable (gdb \_\_\_\_, where \_\_\_\_ is the name of the executable). When you do so, you should be able to see output as such:
+GDB stands for "GNU Project Debugger" and serves as the primary debugger for C and C++ programs. Typical debugging features like breakpoints, stepping, and analytics exist that allow you to pinpoint where issues exist in your code. In industrial applications, it is essential to be able to debug, so we hope this section of the lab will at least serve to introduce you to GDB and how useful it can be.
+
+GDB is run with "gdb ____" where ___ is the name of the binary you wish to debug. Then, you can type "run" to run the program in the debugger. If some runtime error occurs, GDB will be able to provide you with information on what the issue could be.
+
+Note: For debugging in your applications, you must include a "-g" flag when compiling to use GDB at its full potential. In this lab, however, the Makefile handles this flag already, so you do not need to worry about it.
  
- \[New Thread 0x7f85e5bce700 (LWP 364)]
+ broken.cpp
+```c++
+#include <iostream>
+using namespace std;
 
-As can be seen in the screenshot above, the memory address is shown for the created thread in the form 0x\_\_\_\_, and the LWP address for the thread is shown after LWP. The LWP address of a thread isn’t something we will work with in this class, but it useful to know that it is the identifier assigned to the process by the operating system. In the above image, the address of the thread is 0x7f85e5bce700, and the LWP of the thread is 364.
+int factorial(int n) {
+    return factorial(n-1) * n;
+}
 
-We can also find out more information about threads through our use of gdb. The ‘info threads’ command will list the info in the screenshot for all currently running threads from the process, as well as the id of its progenitor thread. The thread we are currently in will have an asterisk to its left. Threads that request time to wait will also show the amount of time they requested and need – the threads in threading.cpp will do this when run via gdb. Each of the threads also has a local ID listed on the right – using gdb, we can switch between these threads with the command ‘thread \_\_\_\_’, where \_\_\_\_ is the id of the thread we are trying to switch to.
+int main(){
+
+    cout << "Beginning execution." << "\n";
+    cout << factorial(10) << "\n";
+
+}
+```
+
+With a very simple program like this, it could potentially be more useful to just look through the code and find the issue. Still, it is essential to be able to use GDB for large-scale programs where pinpointing issues could take hours or days. GDB provides a way to find issues automatically through execution, and can save a lot of time in the hands of a competent debugger.
 
 ## Part 3: Using Xv6 and GBD together (5 Points)
 
