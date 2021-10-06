@@ -6,72 +6,79 @@ This lab is designed to familiarize students with the Xv6 learning operating sys
 
 Please submit your answers to this lab on Gradescope in the assignment marked “Lab #3’. All answers are due by the time specified on Gradescope. The TA present in your lab will do a brief explanation of the various parts of this lab, but you are expected to answer all questions by yourself. Please raise your hand if you have any questions during the lab section – TAs will be notified you are asking a question. Questions and Parts have a number of points marked next to them to signify their weight in this lab’s final grade. Labs are weighted equally, regardless of their total points.
 
-Once you have logged in to Edlab, you can clone the Xv6 repo using
+Once you have logged in to Edlab, you can clone this lab repo using
 
 ```bash
 git clone https://github.com/jbettencourt10/gdb_xv6.git
 ```
 
-Then you can use `cd` to open the directory you just cloned:
+Then, clone the Xv6 repo into the 377-lab-gdb_xv6 using 
+
+```bash
+git clone https://github.com/mit-pdos/xv6-public.git
+```
+
+Finally, you can use `cd` to open the directory you just cloned:
 
 ```bash
 cd 377-lab-gdb_xv6
 ```
 
-This repo includes a Makefile that allows you to locally compile the Xv6 OS and run all the sample code listed in this tutorial. You can compile them by running `make`. Feel free to modify the source files yourself, after making changes you can run `make` again to build new binaries from your modified files. You can also use `make clean` to remove all the built files, this command is usually used when something went wrong during the compilation so that you can start fresh.
+Both folders include Makefiles that allow you to locally compile the lab executable and Xv6 OS and run all the sample code listed in this tutorial. You can compile them by running `make`. Feel free to modify the source files yourself, after making changes you can run `make` again to build new binaries from your modified files. You can also use `make clean` to remove all the built files, this command is usually used when something went wrong during the compilation so that you can start fresh.
 
 ## Part 1: Xv6 (5 Points)
 
-With many programs, it can be advantageous to have multiple processes running at once (for example, a simple game server could be running several games at a time, one per process). To this end, we use threading, which allows us to run multiple processes from the same original process. We can make multiple threads conduct different operations, run simultaneously, or wait for each other to finish. Please look at the code below, and read the commented sections:
+Xv6 is a small operating system designed by MIT for students to learn how operating systems work. It includes several features we have or will learn about, like a scheduler, processes, file system, and system calls. For the sake of this lab, we will be investigating how Xv6 schedules processes, handles I/O, and makes systems calls by looking through the source code available to us. 
 
-threading.cpp
+proc.c
 ```c++
-#include <iostream>
-#include <thread> 
-#include <chrono>
+//PAGEBREAK: 42
+// Per-CPU process scheduler.
+// Each CPU calls scheduler() after setting itself up.
+// Scheduler never returns.  It loops, doing:
+//  - choose a process to run
+//  - swtch to start running that process
+//  - eventually that process transfers control
+//      via swtch back to the scheduler.
+void
+scheduler(void)
+{
+  struct proc *p;
+  struct cpu *c = mycpu();
+  c->proc = 0;
+  
+  for(;;){
+    // Enable interrupts on this processor.
+    sti();
 
-using namespace std;
+    // Loop over process table looking for process to run.
+    acquire(&ptable.lock);
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->state != RUNNABLE)
+        continue;
 
-void printing(){
-	//simply prints out a string
-	cout << "377 is a class!\n";
+      // Switch to chosen process.  It is the process's job
+      // to release ptable.lock and then reacquire it
+      // before jumping back to us.
+      c->proc = p;
+      switchuvm(p);
+      p->state = RUNNING;
+
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
+
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
+    }
+    release(&ptable.lock);
+
+  }
 }
 
-void truth(bool value){
-	//prints out a truth or a lie if the value parameter is true or false, respectively
-	int count = 1;
-	while (count <= 10){
-		if (value){
-			cout << "#" << count << ": 377 is cool!\n";
-		} else {
-			cout << "#" << count << ": 377 is not cool...\n";
-		}
-		count++;
-	}
-}
-
-int main() {
-	std::thread one(truth, false); //Creates a thread that will run the truth() method with the parameter of 'false'
-	std::thread two(printing); //Creates a thread that will run the printing() method
-	std::thread three(truth, true); //Creates a thread that will run the truth() method with the parameter of 'true'
-
-	//Each of the below lines starts a thread, and pauses the execution of the main function until each of them is finished.
-	one.join(); //Runs thread one
-	cout << "Thread #1 finished.\n";
-
-	two.join(); //Runs thread two
-	cout << "Thread #2 finished.\n";
-
-	three.join(); //Runs thread three
-	cout << "Thread #3 finished.\n";
-
-	cout << "All threads finished.\n";
-
-	return 0;
-}
 ```
 
-As can be seen, using join() pauses the main method, but does not necessarily pause the other threads from running since they were created before join() is called. However, the main method will wait until thread one is finished to go past one.join(), until thread two is finished to go past two.join(), and until thread three is finished to go past three.join().
+From the above files, and the files listed on gradescope, you should be able to answer the questions. Additionally, there exists a wide range of documentation about Xv6 on the internet, so feel free to look for that if you find it necessary.
 
 ## Part 2: GDB (5 Points)
 
