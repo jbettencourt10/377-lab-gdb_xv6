@@ -126,7 +126,7 @@ int main(){
 With a very simple program like this, it could potentially be more useful to just look through the code and find the issue. Still, it is essential to be able to use GDB for large-scale programs where pinpointing issues could take hours or days. GDB provides a way to find issues automatically through execution, and can save a lot of time in the hands of a competent debugger.
 
 <!-- ## Part 3: Using Xv6 and GBD together (5 Points)
-
+TODO:
 Now, we will combine using GDB and Xv6 to diagnose an issue that we are having in a program we create. 
 
 <!-- out of bounds array access -->
@@ -135,4 +135,3 @@ Now, we will combine using GDB and Xv6 to diagnose an issue that we are having i
 
 ```
 
-TODO -->
