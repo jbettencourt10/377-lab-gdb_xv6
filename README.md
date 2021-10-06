@@ -76,6 +76,21 @@ scheduler(void)
   }
 }
 
+  // Force process exit if it has been killed and is in user space.
+  // (If it is still executing in the kernel, let it keep running
+  // until it gets to the regular system call return.)
+  if(myproc() && myproc()->killed && (tf->cs&3) == DPL_USER)
+    exit();
+
+  // Force process to give up CPU on clock tick.
+  // If interrupts were on while locks held, would need to check nlock.
+  if(myproc() && myproc()->state == RUNNING &&
+     tf->trapno == T_IRQ0+IRQ_TIMER)
+    yield();
+
+  // Check if the process has been killed since we yielded
+  if(myproc() && myproc()->killed && (tf->cs&3) == DPL_USER)
+    exit();
 ```
 
 From the above files, and the files listed on gradescope, you should be able to answer the questions. Additionally, there exists a wide range of documentation about Xv6 on the internet, so feel free to look for that if you find it necessary.
@@ -96,54 +111,7 @@ Threads can be extremely useful, but they can also encounter errors when they at
 
 threading_lock.cpp
 ```c++
-#include <iostream>
-#include <thread> 
-#include <chrono>
-#include <mutex>
 
-using namespace std;
-
-std::mutex mtx; //Creates the shared mutex
-
-void printing(){
-	//simply prints out a string
-	cout << "377 is a class!\n";
-}
-
-void truth(bool value){
-	//prints out a truth or a lie if the value parameter is true or false, respectively
-	int count = 1;
-	mtx.lock(); //Locks the mutex
-	while (count <= 10){
-		if (value){
-			cout << "#" << count << ": 377 is cool!\n";
-		} else {
-			cout << "#" << count << ": 377 is not cool...\n";
-		}
-		count++;
-	}
-	mtx.unlock(); //Unlocks the mutex
-}
-
-int main() {
-	std::thread one(truth, false); //Creates a thread that will run the truth() method with the parameter of 'false'
-	std::thread two(printing); //Creates a thread that will run the printing() method
-	std::thread three(truth, true); //Creates a thread that will run the truth() method with the parameter of 'true'
-
-	//Each of the below lines starts a thread, and pauses the execution of the main function until each of them is finished.
-	one.join(); //Runs thread one
-	cout << "Thread #1 finished.\n";
-
-	two.join(); //Runs thread two
-	cout << "Thread #2 finished.\n";
-
-	three.join(); //Runs thread three
-	cout << "Thread #3 finished.\n";
-
-	cout << "All threads finished.\n";
-
-	return 0;
-}
 ```
 
 As you can see when running this code, thread #1 will always finish printing out its 10 statements before thread #3 prints out any of its 10 statements. This is because when we lock mtx at the start of truth(), it prevents further calls of truth() to progress past that point until we call mtx.unlock() from the same thread that locked it. In essence, this allows us to stop any threads that rely on mtx, ensuring that certain pieces of code do not run at the same time as one another even if we want multiple processes to be running simultaneously.
