@@ -28,7 +28,9 @@ Both folders include Makefiles that allow you to locally compile the lab binary 
 
 ## Part 1: Xv6 (5 Points)
 
-Xv6 is a small operating system designed by MIT for students to learn how operating systems work. It includes several features we have or will learn about, like a scheduler, processes, file system, and system calls. For the sake of this lab, we will be investigating how Xv6 schedules processes, handles I/O, and makes systems calls by looking through the source code available to us. 
+Xv6 is a small operating system designed by MIT for students to learn how operating systems work. It includes several features we have or will learn about, like a scheduler, processes, file system, and system calls. For the sake of this lab, we will be investigating how Xv6 schedules processes, handles I/O, and makes systems calls by looking through the source code available to us.
+
+To run xv6, first use the 'make' command in the directory. Then, after completion, use the 'make qemu-nox' command in the same directory. A shell will appear, and you will be using the Xv6 OS.
 
 proc.c
 ```c++
