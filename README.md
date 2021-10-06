@@ -12,7 +12,7 @@ Once you have logged in to Edlab, you can clone this lab repo using
 git clone https://github.com/jbettencourt10/gdb_xv6.git
 ```
 
-Then, clone the Xv6 repo into the 377-lab-gdb_xv6 using 
+Then, clone the Xv6 repo into the 377-lab-gdb_xv6 directory using 
 
 ```bash
 git clone https://github.com/mit-pdos/xv6-public.git
@@ -127,11 +127,12 @@ With a very simple program like this, it could potentially be more useful to jus
 
 ## Part 3: Using Xv6 and GBD together (5 Points)
 
-Threads can be extremely useful, but they can also encounter errors when they attempt to modify the same memory as one another. For example, if two threads each try to increment a value by 1, it may be that both operations occur at the same time, and the value is only incremented once instead of the two times it should be incremented instead. For this reason, we use various techniques to ensure that critical data components are not modified outside of their desired scope. One of these structures is called a lock, which is shared between threads and acts as per its name to prevent other threads from accessing sensitive data while it is locked. Please look at the modified threading.cpp below, called threading_lock.cpp:
+Now, we will combine using GDB and Xv6 to diagnose an issue that we are having in a program we create. 
 
-threading_lock.cpp
+<!-- out of bounds array access -->
+
 ```c++
 
 ```
 
-As you can see when running this code, thread #1 will always finish printing out its 10 statements before thread #3 prints out any of its 10 statements. This is because when we lock mtx at the start of truth(), it prevents further calls of truth() to progress past that point until we call mtx.unlock() from the same thread that locked it. In essence, this allows us to stop any threads that rely on mtx, ensuring that certain pieces of code do not run at the same time as one another even if we want multiple processes to be running simultaneously.
+TODO
