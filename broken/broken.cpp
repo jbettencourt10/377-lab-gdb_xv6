@@ -7,5 +7,8 @@ int factorial(int n) {
 }
 
 int main(){
-    cout << factorial(1000000) << "\n";
+
+    cout << "Beginning execution." << "\n";
+    cout << factorial(10) << "\n";
+
 }

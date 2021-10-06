@@ -1,5 +1,5 @@
-all: broken.cpp
- 	  g++ -g -Wall -o broken broken.cpp
+broken: broken.cpp
+	g++ -o broken -g broken.cpp -I.
 
-  clean: 
-	  $(RM) myprog
+clean:
+	rm broken
