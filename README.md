@@ -131,7 +131,7 @@ Now, we will combine using GDB and Xv6 to diagnose an issue that we are having i
 
 <!-- out of bounds array access -->
 
-```c++
+<!-- ```c++
 
-```
+``` -->
 
