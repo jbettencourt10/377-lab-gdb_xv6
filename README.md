@@ -96,7 +96,7 @@ trap.c
     exit();
 ```
 
-From the above files, and the files listed on gradescope, we believe that looking through the source code should be a sufficient amount of information to answer the questions on Gradescope. However, there exists a wide range of documentation about Xv6 on the internet, so feel free to look for that if you find it necessary.
+From the above files, and the files listed on gradescope, we believe that looking through the source code should be a sufficient amount of information to answer the questions on Gradescope. However, there exists a wide range of documentation about Xv6 on the internet, so feel free to look for that if you find it necessary. A useful page is https://github.com/YehudaShapira/xv6-explained/blob/master/Explanations.md.
 
 ## Part 2: GDB (5 Points)
 
@@ -125,7 +125,7 @@ int main(){
 
 With a very simple program like this, it could potentially be more useful to just look through the code and find the issue. Still, it is essential to be able to use GDB for large-scale programs where pinpointing issues could take hours or days. GDB provides a way to find issues automatically through execution, and can save a lot of time in the hands of a competent debugger.
 
-## Part 3: Using Xv6 and GBD together (5 Points)
+<!-- ## Part 3: Using Xv6 and GBD together (5 Points)
 
 Now, we will combine using GDB and Xv6 to diagnose an issue that we are having in a program we create. 
 
@@ -135,4 +135,4 @@ Now, we will combine using GDB and Xv6 to diagnose an issue that we are having i
 
 ```
 
-TODO
+TODO -->
