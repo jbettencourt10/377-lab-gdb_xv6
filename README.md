@@ -12,7 +12,7 @@ Once you have logged in to Edlab, you can clone this lab repo using
 git clone https://github.com/jbettencourt10/gdb_xv6.git
 ```
 
-Then, clone the Xv6 repo into the 377-lab-gdb_xv6 directory using 
+Then, clone the Xv6 repo into the 377-lab-gdb_xv6 directory using
 
 ```bash
 git clone https://github.com/mit-pdos/xv6-public.git
@@ -48,7 +48,7 @@ scheduler(void)
   struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
-  
+
   for(;;){
     // Enable interrupts on this processor.
     sti();
@@ -107,7 +107,7 @@ GDB stands for "GNU Project Debugger" and serves as the primary debugger for C a
 GDB is run with "gdb ____" where ___ is the name of the binary you wish to debug. Then, you can type "run" to run the program in the debugger. If some runtime error occurs, GDB will be able to provide you with information on what the issue could be.
 
 Note: For debugging in your applications, you must include a "-g" flag when compiling to use GDB at its full potential. In this lab, however, the Makefile handles this flag already, so you do not need to worry about it.
- 
+
  broken.cpp
 ```c++
 #include <iostream>
@@ -127,13 +127,4 @@ int main(){
 
 With a very simple program like this, it could potentially be more useful to just look through the code and find the issue. Still, it is essential to be able to use GDB for large-scale programs where pinpointing issues could take hours or days. GDB provides a way to find issues automatically through execution, and can save a lot of time in the hands of a competent debugger.
 
-<!-- ## Part 3: Using Xv6 and GBD together (5 Points)
-TODO:
-Now, we will combine using GDB and Xv6 to diagnose an issue that we are having in a program we create. 
-
-<!-- out of bounds array access -->
-
-<!-- ```c++
-
-``` -->
-
+## Please submit your answers to these questions on gradescope!
